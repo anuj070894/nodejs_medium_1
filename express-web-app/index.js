@@ -1,8 +1,29 @@
+const fs = require('fs');
 const express = require('express');
 const hbs = require('hbs');
 const app = express();
 
+hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs'); // set express related configurations. key -> value pairs
+
+hbs.registerHelper('getCurrentYear', () => {
+	return new Date().getFullYear();
+});
+
+hbs.registerHelper('screamIt', (text) => {
+	return text.toUpperCase();
+});
+
+app.use((req, res, next) => {
+	const currentTime = new Date().toString();
+	const log = `${currentTime}: ${req.method} - ${req.originalUrl}`;
+	fs.appendFile('server.log', log + "\n", (error) => {
+		if (error) {
+			console.log('Some error has happened while opening the file!!!');
+		}
+	});
+	next();
+});
 
 app.use(express.static(__dirname + '/public'));
 
@@ -11,7 +32,7 @@ app.get('/', (req, res) => {
 		titlePage: 'Home Page',
 		contentHeader: 'Home Page',
 		contentBody: 'Welcome to the Portfolio Website',
-		currentYear: new Date().getFullYear()
+		welcomeMessage: 'Hello User!!!'
 	});
 });
 
@@ -23,8 +44,7 @@ app.get('/about', (req, res) => {
 	res.render('about.hbs', {
 		titlePage: 'About Page',
 		contentHeader: 'About Page',
-		contentBody: 'This is a Portfolio Website',
-		currentYear: new Date().getFullYear()
+		contentBody: 'This is a Portfolio Website'
 	});
 });
 
