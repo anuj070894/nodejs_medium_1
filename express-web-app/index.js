@@ -3,6 +3,8 @@ const express = require('express');
 const hbs = require('hbs');
 const app = express();
 
+const port = process.env.PORT || 3000;
+
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs'); // set express related configurations. key -> value pairs
 
@@ -48,6 +50,14 @@ app.get('/about', (req, res) => {
 	});
 });
 
-app.listen(3000, () => {
-	console.log('Listening on port 3000');
+app.get('/projects', (req, res) => {
+	res.render('projects.hbs', {
+		titlePage: 'Projects Page',
+		contentHeader: 'Projects Page',
+		contentBody: 'My Projects'
+	});
+});
+
+app.listen(port, () => {
+	console.log(`Listening on port ${port}`);
 });
