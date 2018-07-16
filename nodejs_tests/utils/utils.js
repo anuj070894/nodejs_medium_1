@@ -12,3 +12,9 @@ module.exports.enterUserName = (user, fullName) => {
 	user.lastName = names[1];
 	return user;
 };
+
+module.exports.asyncAdd = (a, b, callback) => {
+	setTimeout(() => {
+		callback(a + b);
+	}, 1000);
+};
